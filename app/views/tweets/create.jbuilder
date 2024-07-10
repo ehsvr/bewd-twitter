@@ -1,5 +1,4 @@
 json.tweet do
-  json.message         @tweet.message
-  json.user_id    @tweet.user_id
-  json.timestamps  @tweet.timestamps
+    json.username     @tweet.user.username
+    json.message         @tweet.message
 end
