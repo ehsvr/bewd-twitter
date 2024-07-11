@@ -5,11 +5,11 @@ class TweetsController < ApplicationController
     end
 
     def index_by_user
-        session = Session.find_by(user: params[:username])
+        search = User.find_by(username: params[:username])
 
-        if session
-            @tweets = session.user.tweets
-            render 'tweets/index'
+        if search
+            @tweets = search.tweets
+            render 'tweets/index_by_user'
         else
             render json: { tweets: [] }
         end
@@ -36,15 +36,12 @@ class TweetsController < ApplicationController
     def destroy
         token = cookies.permanent.signed[:twitter_session_token]
         session = Session.find_by(token: token)
+        @tweet = Tweet.find_by(id: params[:id])
 
-        if session
-            @tweet = Tweet.find_by(id: params[:id])
-            
-            if @tweet&.destroy
-                render json: { success: true }
-            else
-                render json: { success: false }
-            end
+        if session and @tweet&.destroy
+            render json: { success: true }
+        else
+            render json: { success: false }
         end
     end
 
